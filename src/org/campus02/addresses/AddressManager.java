@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class AddressManager {
     private ArrayList<Address> addresses;// = new ArrayList<>();
@@ -38,6 +39,13 @@ public class AddressManager {
             }
             System.out.println(fileContent);
 
+            // \n oder \r oder \n\r
+            for (String line : fileContent.lines().collect(Collectors.toList()))
+            {
+                String[] columns = line.split(separtor);
+                Address newAddress = new Address(columns[0], columns[1], columns[2], columns[3]);
+                add(newAddress);
+            }
 
             fileInputStream.close();
         } catch (FileNotFoundException e) {
