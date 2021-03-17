@@ -42,7 +42,7 @@ public class CopyDemoApp {
                 fileOutputStream.write(byteRead);
                 counter++;
                 if (counter % (1024 * 1024) == 0)
-                    System.out.print("1MB..");
+                    System.out.print("1MB ..");
             }
             fileOutputStream.flush();
         } finally {
