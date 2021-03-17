@@ -43,6 +43,9 @@ public class AddressManager {
             // \n oder \r oder \n\r
             for (String line : fileContent.lines().collect(Collectors.toList())) {
                 String[] columns = line.split(separtor);
+                if (columns.length != 4) {
+                    throw new AddressLoadWrongFormatException("Fehler bei Zeile: " + line);
+                }
                 Address newAddress = new Address(columns[0], columns[1], columns[2], columns[3]);
                 add(newAddress);
             }

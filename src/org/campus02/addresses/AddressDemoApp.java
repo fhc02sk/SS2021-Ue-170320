@@ -16,9 +16,13 @@ public class AddressDemoApp {
         System.out.println("am.getAddresses() = " + am.getAddresses());
 
 
-        am.loadFromCsv("D:\\temp\\addresses.csv", ";");
+        try {
+            am.loadFromCsv("D:\\temp\\addresses.csv", ";");
+        } catch (AddressLoadException e) {
+            e.printStackTrace();
+        }
 
-        
+
         for(Address a : am.getAddresses()){
             System.out.println(a);    
         }
