@@ -22,13 +22,14 @@ public class AddressManager {
         return addresses;
     }
 
-    public void loadFromCsv(String path, String separtor){
+    public void loadFromCsv(String path, String separtor) throws AddressLoadException {
 
         // 1. Zugriff auf Datei
         //File file = new File(path);
+        FileInputStream fileInputStream = null;
         try {
             // 2. FileInputStream
-            FileInputStream fileInputStream = new FileInputStream(path);
+            fileInputStream = new FileInputStream(path);
 
             String fileContent = "";
             int byteRead = 0;
@@ -40,18 +41,24 @@ public class AddressManager {
             System.out.println(fileContent);
 
             // \n oder \r oder \n\r
-            for (String line : fileContent.lines().collect(Collectors.toList()))
-            {
+            for (String line : fileContent.lines().collect(Collectors.toList())) {
                 String[] columns = line.split(separtor);
                 Address newAddress = new Address(columns[0], columns[1], columns[2], columns[3]);
                 add(newAddress);
             }
-
-            fileInputStream.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new AddressLoadException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new AddressLoadException(e);
+        }
+        finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    throw new AddressLoadException(e);
+                }
+            }
         }
     }
 }
