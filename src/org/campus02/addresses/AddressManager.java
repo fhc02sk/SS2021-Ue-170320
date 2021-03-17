@@ -62,14 +62,21 @@ public class AddressManager {
         }
     }
 
-    public void exportToCsv(String path, String separtor){
+    public void exportToCsv(String path, String separator) throws AddressExportException {
+        FileOutputStream fileOutputStream = null;
+
+        File f = new File(path);
+        if (f.exists()){
+            throw new AddressExportFileAlreadyExistsException("Die Datei '" + path + "' existiert bereits!");
+        }
+
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(path);
+            fileOutputStream = new FileOutputStream(f);
 
             for (Address a : addresses) {
 
-                String line = a.getFirstname() + separtor + a.getLastname()
-                                    + separtor + a.getMobileNumber() + separtor + a.getEmail() ;
+                String line = a.getFirstname() + separator + a.getLastname()
+                                    + separator + a.getMobileNumber() + separator + a.getEmail() ;
 
                 char[] bytes = line.toCharArray();
                 for (char c : bytes){
@@ -78,12 +85,19 @@ public class AddressManager {
                 fileOutputStream.write(13); // Zeilenumbruch
                 fileOutputStream.flush();
             }
-            fileOutputStream.close();
-
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new AddressExportException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new AddressExportException(e);
+        }
+        finally {
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    throw new AddressExportException(e);
+                }
+            }
         }
     }
 }

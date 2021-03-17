@@ -28,7 +28,11 @@ public class AddressDemoApp {
         }
         System.out.println("am.getAddresses().size() = " + am.getAddresses().size());
 
-        am.exportToCsv("D:\\temp\\addresses_new_2017.csv", ";");
-        
+        try {
+            am.exportToCsv("D:\\temp\\addresses_new_2026.csv", ";");
+        } catch (AddressExportException e) {
+            e.printStackTrace();
+        }
+
     }
 }
