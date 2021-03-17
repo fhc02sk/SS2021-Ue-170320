@@ -1,9 +1,6 @@
 package org.campus02.addresses;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -62,6 +59,31 @@ public class AddressManager {
                     throw new AddressLoadException(e);
                 }
             }
+        }
+    }
+
+    public void exportToCsv(String path, String separtor){
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(path);
+
+            for (Address a : addresses) {
+
+                String line = a.getFirstname() + separtor + a.getLastname()
+                                    + separtor + a.getMobileNumber() + separtor + a.getEmail() ;
+
+                char[] bytes = line.toCharArray();
+                for (char c : bytes){
+                    fileOutputStream.write(c);
+                }
+                fileOutputStream.write(13); // Zeilenumbruch
+                fileOutputStream.flush();
+            }
+            fileOutputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
