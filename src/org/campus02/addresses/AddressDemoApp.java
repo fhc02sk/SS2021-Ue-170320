@@ -18,5 +18,11 @@ public class AddressDemoApp {
 
         am.loadFromCsv("D:\\temp\\addresses.csv", ";");
 
+        
+        for(Address a : am.getAddresses()){
+            System.out.println(a);    
+        }
+        System.out.println("am.getAddresses().size() = " + am.getAddresses().size());
+        
     }
 }
