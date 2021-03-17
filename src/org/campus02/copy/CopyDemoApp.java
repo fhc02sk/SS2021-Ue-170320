@@ -1,6 +1,7 @@
 package org.campus02.copy;
 
 import java.io.*;
+import java.nio.file.Files;
 
 public class CopyDemoApp {
 
@@ -27,20 +28,38 @@ public class CopyDemoApp {
             throw new FileAlreadyExistsException("Destination exists already: " + destination);
         }
 
-        FileInputStream fileInputStream = new FileInputStream(sourceFile);
-        FileOutputStream fileOutputStream = new FileOutputStream(destinationFile, false);
+        FileInputStream fileInputStream = null;
+        FileOutputStream fileOutputStream = null;
 
-        int counter = 0;
-        int byteRead = 0;
-        System.out.print("writing ... ");
-        while ((byteRead = fileInputStream.read()) != -1){
-            fileOutputStream.write(byteRead);
-            counter++;
-            if (counter % (1024 * 1024) == 0)
-                System.out.print("1MB..");
+        try {
+            fileInputStream = new FileInputStream(sourceFile);
+            fileOutputStream = new FileOutputStream(destinationFile, false);
+
+            int counter = 0;
+            int byteRead = 0;
+            System.out.print("writing ... ");
+            while ((byteRead = fileInputStream.read()) != -1) {
+                fileOutputStream.write(byteRead);
+                counter++;
+                if (counter % (1024 * 1024) == 0)
+                    System.out.print("1MB..");
+            }
+            fileOutputStream.flush();
+        } finally {
+            try {
+                fileInputStream.close();
+            }
+            catch (IOException ex){
+                ex.printStackTrace();
+            }
+
+            try {
+                fileOutputStream.close();
+            }
+            catch (IOException ex){
+                ex.printStackTrace();
+            }
         }
-        fileOutputStream.flush();
-        fileInputStream.close();
-        fileOutputStream.close();
+
     }
 }
